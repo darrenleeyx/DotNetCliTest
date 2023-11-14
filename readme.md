@@ -5,9 +5,7 @@ dotnet new sln --name CliTest
 dotnet new gitignore
 dotnet new editorconfig
 dotnet new globaljson
-
 dotnet new list // Shows list of project types
-
 
 dotnet new webapi-o src/CliTest.Api
 dotnet new classlib -o src/CliTest.Application
@@ -17,7 +15,18 @@ dotnet new classlib -o src/CliTest.Infrastructure
 dotnet new xunit -o tests/CliTest.Api.Tests.Integration
 dotnet new xunit -o tests/CliTest.Api.Tests.Unit
 
+dotnet add src/CliTest.Api reference src/CliTest.Application
+dotnet add src/CliTest.Api reference src/CliTest.Infrastructure
+dotnet add src/CliTest.Infrastructure reference src/CliTest.Application
+dotnet add src/CliTest.Application reference src/CliTest.Domain
+
+dotnet add tests/CliTest.Api.Tests.Integration reference src/CliTest.Api
+dotnet add tests/CliTest.Api.Tests.Unit reference src/CliTest.Api
+
 dotnet sln add (ls -r **/*.csproj) // Adds all projects to solution
 
 dotnet build
 dotnet run --project CliTest.Api
+
+dotnet test tests/CliTest.Api.Tests.Unit
+
